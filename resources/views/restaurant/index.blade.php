@@ -16,6 +16,16 @@
         </div>
     @endif
 
+    @auth
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8 text-center">
+                <a href="{{ route('user.orders.index') }}" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                    <i class="fa-solid fa-clock-rotate-left me-2"></i> Suivre mes commandes et réservations
+                </a>
+            </div>
+        </div>
+    @endauth
+
     <!-- Barre de Recherche et Filtres -->
     <div class="row justify-content-center mb-5">
         <div class="col-md-8">

@@ -219,17 +219,12 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('user.orders.index') }}">
-                                        <i class="fa-solid fa-clock-rotate-left me-2"></i> Mes Commandes
-                                    </a>
-                                    
                                     @if(Auth::user()->is_admin)
                                         <a class="dropdown-item text-primary fw-bold" href="{{ route('admin.dashboard') }}">
                                             <i class="fa-solid fa-shield-halved me-2"></i> Panneau Admin
                                         </a>
+                                        <div class="dropdown-divider"></div>
                                     @endif
-                                    
-                                    <div class="dropdown-divider"></div>
 
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
