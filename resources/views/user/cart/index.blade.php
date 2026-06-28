@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <h2 class="fw-bold mb-4" style="color: var(--cedila-title);">
-        <i class="fa-solid fa-cart-shopping me-2 text-primary"></i> Mon Panier
+        <i class="fa-solid fa-cart-shopping me-2 text-warning"></i> Mon Panier
     </h2>
 
     @if(session('success'))
@@ -54,8 +54,8 @@
                                             </div>
                                         </div>
                                         <div class="text-end">
-                                            <div class="fw-bold fs-5 text-primary mb-2">{{ $item['price'] }} FCFA x {{ $item['quantity'] }}</div>
-                                            <div class="fw-bold text-navy">{{ $item['price'] * $item['quantity'] }} FCFA</div>
+                                            <div class="fw-bold fs-6 text-muted mb-2">{{ $item['price'] }} FCFA x {{ $item['quantity'] }}</div>
+                                            <div class="fw-bold fs-5" style="color: var(--cedila-title);">{{ $item['price'] * $item['quantity'] }} FCFA</div>
                                             <form action="{{ route('cart.remove', $id) }}" method="POST" class="mt-2">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"><i class="fa-solid fa-trash me-1"></i> Retirer</button>
