@@ -17,6 +17,9 @@
                         <a href="{{ route('admin.dashboard') }}" class="nav-link fw-bold mb-2 py-3 rounded-3 {{ request()->routeIs('admin.dashboard') ? 'active text-white' : 'text-secondary' }}">
                             <i class="fa-solid fa-chart-pie me-2"></i> Vue d'ensemble
                         </a>
+                        <a href="{{ route('admin.categories.index') ?? '#' }}" class="nav-link fw-bold mb-2 py-3 rounded-3 {{ request()->routeIs('admin.categories.*') ? 'active text-white' : 'text-secondary' }}">
+                            <i class="fa-solid fa-layer-group me-2"></i> Catégories
+                        </a>
                         <a href="{{ route('admin.menus.index') ?? '#' }}" class="nav-link fw-bold mb-2 py-3 rounded-3 {{ request()->routeIs('admin.menus.*') ? 'active text-white' : 'text-secondary' }}">
                             <i class="fa-solid fa-utensils me-2"></i> Menu & Boissons
                         </a>

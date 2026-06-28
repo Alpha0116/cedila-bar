@@ -192,55 +192,221 @@
             </div>
         </div>
 
-        <div class="container mt-5 text-start">
-            <h2 class="fw-bold mb-0" style="color: #1a1a1a; font-size: 2rem;">Les offres du moment</h2>
-            <p class="text-muted mb-4" style="font-size: 1.1rem;">Celles qui partent le plus vite cette semaine</p>
+        <style>
+            /* Custom Scrollbar for pills */
+            .category-nav {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+                margin-bottom: 2rem;
+            }
+            .category-nav::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera */
+            }
             
-            <div class="row">
-                @forelse($foodItems as $item)
-                    <div class="col-lg-4 col-md-6 mb-5 menu-card-wrapper">
-                        <div class="card h-100 border-0 text-start hover-shadow-lg transition-all" style="border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer;" onclick="openOrderModal({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price }}, {{ Auth::check() ? 'true' : 'false' }})">
-                            <div style="position: relative; overflow: hidden;">
-                                <img src="{{ $item->image_path ? (str_starts_with($item->image_path, 'http') ? $item->image_path : asset('storage/'.$item->image_path)) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop' }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover; border-radius: 20px 20px 0 0;">
-                                
-                                <!-- Badges sur l'image -->
-                                <div style="position: absolute; top: 12px; left: 12px; background: white; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; color: #333;">
-                                    <i class="fa-solid fa-gift text-purple" style="color: #8A2BE2;"></i> Offre du moment
-                                </div>
-                                <div style="position: absolute; top: 12px; right: 12px; background: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                                    <i class="fa-regular fa-heart text-muted"></i>
-                                </div>
-                            </div>
+            .category-pill {
+                display: inline-block;
+                padding: 10px 20px;
+                margin-right: 10px;
+                border-radius: 50px;
+                background-color: #f1f3f5;
+                color: #495057;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+            }
+            .category-pill:hover, .category-pill.active {
+                background-color: #212529;
+                color: #fff;
+            }
 
-                            <div class="card-body p-3">
-                                <p class="text-uppercase text-muted mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                                    <i class="fa-solid fa-store me-1"></i> CEDILA BAR RESTAURANT
-                                </p>
-                                <h5 class="card-title fw-bold mb-2 text-dark" style="font-size: 1rem; line-height: 1.2;">
-                                    {{ strtoupper($item->name) }}
-                                </h5>
-                                
-                                <div class="d-flex align-items-center mb-3">
-                                    <span class="fw-bold fs-5 text-dark">{{ number_format($item->price, 0, ',', ' ') }} FCFA</span>
-                                </div>
+            .search-container {
+                position: relative;
+                max-width: 600px;
+                margin: 0 auto 30px auto;
+            }
+            .search-container input {
+                width: 100%;
+                padding: 15px 20px 15px 50px;
+                border-radius: 50px;
+                border: 1px solid #ced4da;
+                font-size: 1.1rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                transition: box-shadow 0.3s ease;
+            }
+            .search-container input:focus {
+                outline: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                border-color: #adb5bd;
+            }
+            .search-container i {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #6c757d;
+                font-size: 1.2rem;
+            }
+            
+            .category-section {
+                padding-top: 20px;
+                margin-bottom: 40px;
+            }
+            .category-header {
+                font-weight: 800;
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+                color: #212529;
+                border-bottom: 2px solid #f1f3f5;
+                padding-bottom: 10px;
+            }
+        </style>
 
-                                <button class="btn btn-primary w-100 rounded-pill fw-bold" onclick="event.stopPropagation(); openOrderModal({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price }}, {{ Auth::check() ? 'true' : 'false' }})">
-                                    Commander
-                                </button>
-                            </div>
+        <div class="container mt-5 text-start">
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Qu'est-ce qu'on vous apporte aujourd'hui ?" onkeyup="filterMenu()">
+            </div>
+
+            <!-- Category Pills Navigation -->
+            <div class="category-nav">
+                @foreach($categories as $category)
+                    <a href="#cat-{{ $category->id }}" class="category-pill {{ $loop->first ? 'active' : '' }}">{{ $category->name }}</a>
+                @endforeach
+            </div>
+            
+            <div id="menuContainer">
+                @forelse($categories as $category)
+                    <div class="category-section" id="cat-{{ $category->id }}" style="{{ $loop->first ? 'display: block;' : 'display: none;' }}">
+                        <h2 class="category-header">{{ strtoupper($category->name) }}</h2>
+                        <div class="row">
+                            @foreach($category->menuItems as $item)
+                                <div class="col-lg-4 col-md-6 mb-4 menu-card-wrapper menu-item-card" data-name="{{ strtolower($item->name) }}">
+                                    <div class="card h-100 border-0 text-start hover-shadow-lg transition-all" style="border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer;" onclick="openOrderModal({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price }}, {{ Auth::check() ? 'true' : 'false' }})">
+                                        <div style="position: relative; overflow: hidden;">
+                                            <img src="{{ $item->image_path ? (str_starts_with($item->image_path, 'http') ? $item->image_path : asset('storage/'.$item->image_path)) : asset('images/default_food.png') }}" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop'" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover; border-radius: 20px 20px 0 0;">
+                                            <div style="position: absolute; bottom: 10px; right: 10px; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                                                <i class="fa-solid fa-plus text-primary fs-5"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body p-3">
+                                            <h5 class="card-title fw-bold mb-1 text-dark" style="font-size: 1.1rem;">
+                                                {{ strtoupper($item->name) }}
+                                            </h5>
+                                            @if($item->description)
+                                                <p class="text-muted small mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                                    {{ $item->description }}
+                                                </p>
+                                            @endif
+                                            
+                                            <div class="d-flex align-items-center mt-2">
+                                                <span class="fw-bold fs-6 text-dark">{{ number_format($item->price, 0, ',', ' ') }} FCFA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted">Menu en cours de préparation.</p>
+                    <p class="text-muted text-center py-5">Menu en cours de préparation.</p>
                 @endforelse
             </div>
             
-            <div class="mt-4 text-center">
-                <a href="{{ route('restaurant.accueil') }}" class="btn btn-outline-primary btn-lg rounded-pill px-5 fw-bold shadow-sm">Voir plus d'offres <i class="fa-solid fa-arrow-right ms-2"></i></a>
+            <div id="noResults" class="text-center py-5" style="display: none;">
+                <i class="fa-solid fa-magnifying-glass fs-1 text-muted mb-3"></i>
+                <h4>Aucun plat ne correspond à votre recherche</h4>
+                <p class="text-muted">Essayez un autre mot clé (ex: Chawarma, Pizza...)</p>
             </div>
+            
         </div>
     </div>
 </div>
+
+<script>
+    function filterMenu() {
+        var input = document.getElementById('searchInput').value.toLowerCase();
+        
+        // If search is empty, revert to the first category
+        if (input === '') {
+            var firstPill = document.querySelector('.category-pill');
+            if (firstPill) {
+                firstPill.click(); // This will naturally hide other sections
+            }
+            return;
+        }
+
+        // When searching, remove active class from all pills
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+
+        var items = document.getElementsByClassName('menu-item-card');
+        var categories = document.getElementsByClassName('category-section');
+        var hasVisibleItems = false;
+
+        // Filter items across ALL categories
+        for (var i = 0; i < items.length; i++) {
+            var name = items[i].getAttribute('data-name');
+            if (name.includes(input)) {
+                items[i].style.display = "";
+                hasVisibleItems = true;
+            } else {
+                items[i].style.display = "none";
+            }
+        }
+
+        // Hide empty categories and show ones with results
+        for (var j = 0; j < categories.length; j++) {
+            var catItems = categories[j].getElementsByClassName('menu-item-card');
+            var catHasVisible = false;
+            for (var k = 0; k < catItems.length; k++) {
+                if (catItems[k].style.display !== "none") {
+                    catHasVisible = true;
+                    break;
+                }
+            }
+            categories[j].style.display = catHasVisible ? "block" : "none";
+        }
+
+        // Show/hide no results message
+        document.getElementById('noResults').style.display = hasVisibleItems ? "none" : "block";
+    }
+
+    // Active state for pills on scroll
+    document.querySelectorAll('.category-pill').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            
+            var targetId = this.getAttribute('href');
+            
+            if (targetId === '#all') {
+                document.querySelectorAll('.category-section').forEach(sec => sec.style.display = 'block');
+                document.getElementById('searchInput').value = '';
+                filterMenu(); // Reset search logic
+            } else {
+                document.querySelectorAll('.category-section').forEach(sec => {
+                    if ('#' + sec.id === targetId) {
+                        sec.style.display = 'block';
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                });
+                document.getElementById('searchInput').value = '';
+                // Ensure items inside target section are visible
+                var targetSec = document.querySelector(targetId);
+                if (targetSec) {
+                    targetSec.querySelectorAll('.menu-item-card').forEach(item => item.style.display = '');
+                }
+            }
+        });
+    });
+</script>
 
 <!-- Modal Commande Rapide -->
 <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">

@@ -10,10 +10,16 @@ class BarControleur extends Controller
 {
     public function index()
     {
-        $drinkItems = MenuItem::where('is_available_today', true)
-                            ->where('type', 'drink')
-                            ->get();
-                            
+        // Load drink categories that have available items
+        $categories = \App\Models\Category::with(['menuItems' => function($query) {
+            $query->where('is_available_today', true);
+        }])
+        ->where('type', 'drink')
+        ->whereHas('menuItems', function($query) {
+            $query->where('is_available_today', true);
+        })
+        ->orderBy('sort_order')
+        ->get();
         $today = Carbon::today();
         
         $evenementsAvenir = Evenement::where('is_published', true)
@@ -26,7 +32,7 @@ class BarControleur extends Controller
                            ->orderBy('event_date', 'desc')
                            ->get();
                             
-        return view('bar.index', compact('drinkItems', 'evenementsAvenir', 'evenementsPasses'));
+        return view('bar.index', compact('categories', 'evenementsAvenir', 'evenementsPasses'));
     }
 
     public function like($id)

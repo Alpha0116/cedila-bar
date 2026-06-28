@@ -14,8 +14,19 @@ class MenuItem extends Model
         'price',
         'type',
         'is_available_today',
-        'image_path'
+        'image_path',
+        'category_id',
     ];
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     protected $casts = [
         'is_available_today' => 'boolean',

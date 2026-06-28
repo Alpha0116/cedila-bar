@@ -51,7 +51,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/reservations', [AdminController::class, 'reservationsIndex'])->name('reservations.index');
     Route::post('/reservations/{reservation}/status', [AdminController::class, 'updateReservationStatus'])->name('reservations.update');
     
-    // Menus & Boissons
+    // Menus & Catégories
+    Route::resource('categories', \App\Http\Controllers\AdminCategoryControleur::class);
     Route::resource('menus', AdminMenuControleur::class);
     
     // Evénements

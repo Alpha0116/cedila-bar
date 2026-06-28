@@ -36,17 +36,17 @@
                         </td>
                         <td class="px-4 py-3 fw-bold">{{ $menu->name }}</td>
                         <td class="px-4 py-3 text-capitalize">
-                            @if($menu->category == 'food')
-                                <span class="badge bg-warning text-dark"><i class="fa-solid fa-burger me-1"></i> Plat</span>
-                            @elseif($menu->category == 'drink')
-                                <span class="badge bg-info text-dark"><i class="fa-solid fa-martini-glass me-1"></i> Boisson</span>
+                            @if($menu->category)
+                                <span class="badge {{ $menu->category->type == 'food' ? 'bg-warning' : 'bg-info' }} text-dark">
+                                    <i class="fa-solid {{ $menu->category->type == 'food' ? 'fa-burger' : 'fa-martini-glass' }} me-1"></i> {{ $menu->category->name }}
+                                </span>
                             @else
-                                <span class="badge bg-secondary">{{ $menu->category }}</span>
+                                <span class="badge bg-secondary">Non catégorisé</span>
                             @endif
                         </td>
                         <td class="px-4 py-3 text-end fw-bold">{{ $menu->price }} FCFA</td>
                         <td class="px-4 py-3 text-center">
-                            @if($menu->is_available)
+                            @if($menu->is_available_today)
                                 <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i> Disponible</span>
                             @else
                                 <span class="badge bg-danger"><i class="fa-solid fa-xmark me-1"></i> Épuisé</span>

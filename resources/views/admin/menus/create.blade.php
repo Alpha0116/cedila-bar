@@ -35,13 +35,15 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label fw-bold">Catégorie <span class="text-danger">*</span></label>
-                            <select name="category" class="form-select form-select-lg @error('category') is-invalid @enderror" required>
-                                <option value="">Choisir...</option>
-                                <option value="food" {{ old('category') == 'food' ? 'selected' : '' }}>Plat</option>
-                                <option value="drink" {{ old('category') == 'drink' ? 'selected' : '' }}>Boisson</option>
-                                <option value="dessert" {{ old('category') == 'dessert' ? 'selected' : '' }}>Dessert</option>
+                            <select name="category_id" class="form-select form-select-lg @error('category_id') is-invalid @enderror" required>
+                                <option value="">Choisir une catégorie...</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }} ({{ $category->type == 'food' ? 'Plat' : 'Boisson' }})
+                                    </option>
+                                @endforeach
                             </select>
-                            @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>
                 </div>

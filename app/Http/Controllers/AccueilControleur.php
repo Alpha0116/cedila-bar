@@ -2,24 +2,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\MenuItem;
+use App\Models\Category;
 use App\Models\Evenement;
 
 class AccueilControleur extends Controller
 {
     public function index()
     {
-        $foodItems = MenuItem::where('is_available_today', true)
-                            ->where('type', 'food')
-                            ->take(6)
-                            ->get();
+        // Load categories that have available items, ordered by sort_order
+        $categories = Category::with(['menuItems' => function($query) {
+            $query->where('is_available_today', true);
+        }])
+        ->whereHas('menuItems', function($query) {
+            $query->where('is_available_today', true);
+        })
+        ->orderBy('sort_order')
+        ->get();
 
         $evenements = Evenement::where('is_published', true)->orderBy('event_date', 'asc')->get();
 
-        $drinks = MenuItem::where('is_available_today', true)
-                          ->where('type', 'drink')
-                          ->get();
-
-        return view('welcome', compact('evenements', 'foodItems', 'drinks'));
+        return view('welcome', compact('evenements', 'categories'));
     }
 }
