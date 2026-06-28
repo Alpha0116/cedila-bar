@@ -51,8 +51,16 @@
                                     <p class="text-muted small mb-2"><i class="fa-regular fa-clock me-1"></i> {{ $order->created_at->format('d/m/Y à H:i') }}</p>
                                     <p class="fw-bold mb-0">{{ number_format($order->total_price, 0, ',', ' ') }} FCFA</p>
                                     <hr>
-                                    <div class="text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
                                         <a href="{{ route('user.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-4">Suivre la commande</a>
+                                        @if($order->status == 'received')
+                                            <form action="{{ route('user.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?');">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                    <i class="fa-solid fa-ban"></i> Annuler
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
