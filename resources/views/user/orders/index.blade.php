@@ -84,14 +84,64 @@
                                             <span class="badge bg-success rounded-pill px-3">Confirmée</span>
                                         @elseif($res->status == 'cancelled')
                                             <span class="badge bg-danger rounded-pill px-3">Annulée</span>
-                                        @else
+                                        @elseif($res->status == 'pending')
                                             <span class="badge bg-secondary rounded-pill px-3">En attente</span>
                                         @endif
                                     </div>
-                                    <p class="text-muted small mb-2"><i class="fa-regular fa-clock me-1"></i> {{ \Carbon\Carbon::parse($res->reservation_date)->format('d/m/Y à H:i') }}</p>
+                                    <p class="text-muted small mb-2"><i class="fa-regular fa-clock me-1"></i> {{ \Carbon\Carbon::parse($res->reservation_date)->format('d/m/Y') }} à {{ \Carbon\Carbon::parse($res->reservation_time)->format('H:i') ?? 'H:i' }}</p>
                                     @if($res->special_request)
-                                        <p class="small mb-0"><strong>Demande :</strong> {{ $res->special_request }}</p>
+                                        <p class="small mb-3"><strong>Demande :</strong> {{ $res->special_request }}</p>
                                     @endif
+                                    
+                                    @if($res->status == 'pending')
+                                        <hr>
+                                        <div class="d-flex gap-2 justify-content-end mt-2">
+                                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#editReservationModal{{ $res->id }}">
+                                                <i class="fa-solid fa-pen"></i> Modifier
+                                            </button>
+                                            <form action="{{ route('user.reservations.cancel', $res->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                    <i class="fa-solid fa-ban"></i> Annuler
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Modification Réservation -->
+                        <div class="modal fade" id="editReservationModal{{ $res->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header border-0 pb-0">
+                                        <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-pen text-primary me-2"></i> Modifier la réservation</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <form action="{{ route('user.reservations.update', $res->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold small">Date</label>
+                                                <input type="date" name="reservation_date" class="form-control" value="{{ $res->reservation_date }}" required min="{{ date('Y-m-d') }}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold small">Heure</label>
+                                                <input type="time" name="reservation_time" class="form-control" value="{{ $res->reservation_time }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold small">Nombre de personnes</label>
+                                                <input type="number" name="guests" class="form-control" value="{{ $res->guests }}" min="1" max="20" required>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="form-label fw-bold small">Demande spéciale (optionnel)</label>
+                                                <textarea name="special_request" class="form-control" rows="2">{{ $res->special_request }}</textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold">Enregistrer les modifications</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

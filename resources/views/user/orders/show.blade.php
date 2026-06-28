@@ -84,10 +84,19 @@
 </style>
 
 <div class="container py-5">
-    <div class="mb-4">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
         <a href="{{ route('user.orders.index') }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
             <i class="fa-solid fa-arrow-left me-2"></i> Retour aux commandes
         </a>
+        
+        @if($order->status == 'received')
+            <form action="{{ route('user.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette commande ?');">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3 fw-bold">
+                    <i class="fa-solid fa-ban me-1"></i> Annuler la commande
+                </button>
+            </form>
+        @endif
     </div>
 
     <div class="row justify-content-center">

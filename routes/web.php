@@ -28,6 +28,9 @@ Route::middleware(['auth'])->group(function () {
     // Espace client
     Route::get('/mes-commandes', [\App\Http\Controllers\UserController::class, 'index'])->name('user.orders.index');
     Route::get('/mes-commandes/{id}', [\App\Http\Controllers\UserController::class, 'showOrder'])->name('user.orders.show');
+    Route::post('/mes-commandes/{id}/cancel', [\App\Http\Controllers\UserController::class, 'cancelOrder'])->name('user.orders.cancel');
+    Route::post('/mes-reservations/{id}/cancel', [\App\Http\Controllers\UserController::class, 'cancelReservation'])->name('user.reservations.cancel');
+    Route::put('/mes-reservations/{id}/update', [\App\Http\Controllers\UserController::class, 'updateReservation'])->name('user.reservations.update');
 });
 
 // Admin routes
