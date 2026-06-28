@@ -74,7 +74,7 @@
 
                             @forelse($reservations->take(3) as $res)
                             <tr>
-                                <td class="px-4 py-3"><span class="badge bg-navy bg-opacity-10 text-navy border border-navy" style="color: var(--cedila-title); border-color: var(--cedila-title);"><i class="fa-regular fa-calendar-check me-1"></i> Réservation</span></td>
+                                <td class="px-4 py-3"><span class="badge bg-navy bg-opacity-10 text-navy border border-navy" style="color: var(--cedila-title); border-color: var(--cedila-navy);"><i class="fa-regular fa-calendar-check me-1"></i> Réservation</span></td>
                                 <td class="px-4 py-3 fw-bold">{{ $res->user->name }}</td>
                                 <td class="px-4 py-3 text-muted">{{ $res->guests }} pers. - {{ \Carbon\Carbon::parse($res->reservation_date)->format('d/m Y H:i') }}</td>
                                 <td class="px-4 py-3 text-end">
@@ -89,7 +89,7 @@
             </div>
             <div class="card-footer bg-white border-0 text-center py-3 rounded-bottom-4">
                 <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-outline-primary rounded-pill px-4">Gérer les commandes</a>
-                <a href="{{ route('admin.reservations.index') }}" class="btn btn-sm btn-outline-navy rounded-pill px-4" style="color: var(--cedila-title); border-color: var(--cedila-title);">Gérer les réservations</a>
+                <a href="{{ route('admin.reservations.index') }}" class="btn btn-sm btn-outline-navy rounded-pill px-4" style="color: var(--cedila-title); border-color: var(--cedila-navy);">Gérer les réservations</a>
             </div>
         </div>
     </div>

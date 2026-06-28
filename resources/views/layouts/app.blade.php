@@ -99,8 +99,8 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .btn-primary {
-            background-color: var(--cedila-title);
-            border-color: var(--cedila-title);
+            background-color: var(--cedila-navy);
+            border-color: var(--cedila-navy);
             color: #fff;
         }
         .btn-primary:hover {

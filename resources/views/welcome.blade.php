@@ -92,7 +92,7 @@
 
     /* Modern Footer */
     .custom-footer {
-        background-color: var(--cedila-title);
+        background-color: var(--cedila-navy);
         color: #fff;
         padding: 40px 0 20px;
         margin-top: 60px;
