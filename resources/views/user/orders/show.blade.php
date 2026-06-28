@@ -102,6 +102,8 @@
                         En préparation
                     @elseif($order->status == 'confirmed')
                         Confirmée
+                    @elseif($order->status == 'cancelled')
+                        <span class="text-danger">Annulée</span>
                     @else
                         En attente
                     @endif
@@ -111,72 +113,80 @@
             </div>
 
             <div class="card border-0 shadow-sm rounded-4 p-4">
-                <ul class="timeline mb-0">
-                    <!-- Commande reçue -->
-                    <li class="timeline-item active">
-                        <div class="timeline-icon">
-                            <i class="fa-solid fa-check"></i>
-                        </div>
-                        <div class="timeline-title">Commande reçue</div>
-                        <div class="timeline-date">{{ $order->created_at->format('d/m/Y H:i:s') }}</div>
-                    </li>
-
-                    <!-- Confirmation du vendeur -->
-                    @php $isConfirmed = $order->confirmed_at || $order->prep_at || $order->delivery_at || $order->finished_at; @endphp
-                    <li class="timeline-item {{ $isConfirmed ? 'active' : '' }}">
-                        <div class="timeline-icon">
-                            @if($isConfirmed) <i class="fa-solid fa-check"></i> @endif
-                        </div>
-                        <div class="timeline-title">Confirmation du vendeur</div>
-                        @if($isConfirmed)
-                            <div class="timeline-date">{{ $order->confirmed_at ? $order->confirmed_at->format('d/m/Y H:i:s') : $order->created_at->format('d/m/Y H:i:s') }}</div>
-                            <div class="timeline-desc">Le vendeur vérifie la disponibilité des produits.</div>
-                        @endif
-                    </li>
-
-                    <!-- Préparation -->
-                    @php $isPrep = $order->prep_at || $order->delivery_at || $order->finished_at; @endphp
-                    <li class="timeline-item {{ $isPrep ? 'active' : '' }}">
-                        <div class="timeline-icon">
-                            @if($isPrep) <i class="fa-solid fa-check"></i> @endif
-                        </div>
-                        <div class="timeline-title">Préparation</div>
-                        @if($isPrep)
-                            <div class="timeline-date">{{ $order->prep_at ? $order->prep_at->format('d/m/Y H:i:s') : '' }}</div>
-                        @endif
-                    </li>
-
-                    <!-- Livraison (uniquement si le type est livraison) -->
-                    @if($order->delivery_type == 'delivery')
-                        @php $isDelivery = $order->delivery_at || $order->finished_at; @endphp
-                        <li class="timeline-item {{ $isDelivery ? 'active' : '' }}">
+                @if($order->status == 'cancelled')
+                    <div class="text-center py-4">
+                        <i class="fa-solid fa-ban fa-4x text-danger mb-3"></i>
+                        <h4 class="fw-bold text-danger">Commande Annulée</h4>
+                        <p class="text-muted">Le restaurant n'a pas pu valider votre commande. Veuillez nous contacter pour plus d'informations.</p>
+                    </div>
+                @else
+                    <ul class="timeline mb-0">
+                        <!-- Commande reçue -->
+                        <li class="timeline-item active">
                             <div class="timeline-icon">
-                                @if($isDelivery) <i class="fa-solid fa-check"></i> @endif
+                                <i class="fa-solid fa-check"></i>
                             </div>
-                            <div class="timeline-title">Livraison</div>
-                            @if($isDelivery)
-                                <div class="timeline-date">{{ $order->delivery_at ? $order->delivery_at->format('d/m/Y H:i:s') : '' }}</div>
-                                @if($order->delivery_driver)
-                                    <div class="timeline-desc">Votre livreur s'appelle <span class="fw-bold text-uppercase" style="color: var(--cedila-title);">{{ $order->delivery_driver }}</span></div>
-                                @endif
+                            <div class="timeline-title">Commande reçue</div>
+                            <div class="timeline-date">{{ $order->created_at->format('d/m/Y H:i:s') }}</div>
+                        </li>
+
+                        <!-- Confirmation du vendeur -->
+                        @php $isConfirmed = $order->confirmed_at || $order->prep_at || $order->delivery_at || $order->finished_at; @endphp
+                        <li class="timeline-item {{ $isConfirmed ? 'active' : '' }}">
+                            <div class="timeline-icon">
+                                @if($isConfirmed) <i class="fa-solid fa-check"></i> @endif
+                            </div>
+                            <div class="timeline-title">Confirmation du vendeur</div>
+                            @if($isConfirmed)
+                                <div class="timeline-date">{{ $order->confirmed_at ? $order->confirmed_at->format('d/m/Y H:i:s') : $order->created_at->format('d/m/Y H:i:s') }}</div>
+                                <div class="timeline-desc">Le vendeur a vérifié la disponibilité des produits.</div>
                             @endif
                         </li>
-                    @endif
 
-                    <!-- Livrée / Terminée -->
-                    @php $isFinished = $order->finished_at; @endphp
-                    <li class="timeline-item {{ $isFinished ? 'active' : '' }}">
-                        <div class="timeline-icon">
-                            @if($isFinished) <i class="fa-solid fa-check"></i> @endif
-                        </div>
-                        <div class="timeline-title">
-                            @if($order->delivery_type == 'delivery') Livrée @else Récupérée @endif
-                        </div>
-                        @if($isFinished)
-                            <div class="timeline-date">{{ $order->finished_at->format('d/m/Y H:i:s') }}</div>
+                        <!-- Préparation -->
+                        @php $isPrep = $order->prep_at || $order->delivery_at || $order->finished_at; @endphp
+                        <li class="timeline-item {{ $isPrep ? 'active' : '' }}">
+                            <div class="timeline-icon">
+                                @if($isPrep) <i class="fa-solid fa-check"></i> @endif
+                            </div>
+                            <div class="timeline-title">Préparation</div>
+                            @if($isPrep)
+                                <div class="timeline-date">{{ $order->prep_at ? $order->prep_at->format('d/m/Y H:i:s') : '' }}</div>
+                            @endif
+                        </li>
+
+                        <!-- Livraison (uniquement si le type est livraison) -->
+                        @if($order->delivery_type == 'delivery')
+                            @php $isDelivery = $order->delivery_at || $order->finished_at; @endphp
+                            <li class="timeline-item {{ $isDelivery ? 'active' : '' }}">
+                                <div class="timeline-icon">
+                                    @if($isDelivery) <i class="fa-solid fa-check"></i> @endif
+                                </div>
+                                <div class="timeline-title">Livraison</div>
+                                @if($isDelivery)
+                                    <div class="timeline-date">{{ $order->delivery_at ? $order->delivery_at->format('d/m/Y H:i:s') : '' }}</div>
+                                    @if($order->delivery_driver)
+                                        <div class="timeline-desc">Votre livreur s'appelle <span class="fw-bold text-uppercase" style="color: var(--cedila-title);">{{ $order->delivery_driver }}</span></div>
+                                    @endif
+                                @endif
+                            </li>
                         @endif
-                    </li>
-                </ul>
+
+                        <!-- Livrée / Terminée -->
+                        @php $isFinished = $order->finished_at; @endphp
+                        <li class="timeline-item {{ $isFinished ? 'active' : '' }}">
+                            <div class="timeline-icon">
+                                @if($isFinished) <i class="fa-solid fa-check"></i> @endif
+                            </div>
+                            <div class="timeline-title">
+                                @if($order->delivery_type == 'delivery') Livrée @else Récupérée @endif
+                            </div>
+                            @if($isFinished)
+                                <div class="timeline-date">{{ $order->finished_at->format('d/m/Y H:i:s') }}</div>
+                            @endif
+                        </li>
+                    </ul>
+                @endif
             </div>
             
             <!-- Détails de la commande au bas -->

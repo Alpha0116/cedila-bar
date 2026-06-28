@@ -48,46 +48,64 @@
                         </td>
                         <td class="px-4 py-3 text-end fw-bold">{{ $order->total_price }} FCFA</td>
                         <td class="px-4 py-3 text-center">
-                            @php
-                                $statusColors = [
-                                    'received' => 'bg-secondary',
-                                    'confirmed' => 'bg-primary',
-                                    'prep' => 'bg-warning text-dark',
-                                    'delivery' => 'bg-info',
-                                    'finished' => 'bg-success'
-                                ];
-                                $statusColor = $statusColors[$order->status] ?? 'bg-secondary';
-                                $statusLabels = [
-                                    'received' => 'Reçue',
-                                    'confirmed' => 'Confirmée',
-                                    'prep' => 'En préparation',
-                                    'delivery' => 'En livraison/Prête',
-                                    'finished' => 'Terminée'
-                                ];
-                                $statusLabel = $statusLabels[$order->status] ?? strtoupper($order->status);
-                            @endphp
-                            <span class="badge {{ $statusColor }}">{{ $statusLabel }}</span>
-                        </td>
-                        <td class="px-4 py-3 text-end">
-                                <form action="{{ route('admin.orders.update', $order) }}" method="POST" class="d-flex flex-column gap-2">
-                                    @csrf
-                                    <div class="d-flex align-items-center gap-2">
-                                        <select name="status" class="form-select form-select-sm status-select" style="width: auto;">
-                                            <option value="received" {{ $order->status == 'received' ? 'selected' : '' }}>Reçue</option>
-                                            <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmée</option>
-                                            <option value="prep" {{ $order->status == 'prep' ? 'selected' : '' }}>Préparation</option>
-                                            @if($order->delivery_type == 'delivery')
-                                                <option value="delivery" {{ $order->status == 'delivery' ? 'selected' : '' }}>Livraison</option>
-                                            @endif
-                                            <option value="finished" {{ $order->status == 'finished' ? 'selected' : '' }}>Terminée</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-check"></i></button>
+                                @php
+                                    $statusColors = [
+                                        'received' => 'bg-secondary',
+                                        'confirmed' => 'bg-primary',
+                                        'prep' => 'bg-warning text-dark',
+                                        'delivery' => 'bg-info',
+                                        'finished' => 'bg-success',
+                                        'cancelled' => 'bg-danger'
+                                    ];
+                                    $statusColor = $statusColors[$order->status] ?? 'bg-secondary';
+                                    $statusLabels = [
+                                        'received' => 'Nouvelle',
+                                        'confirmed' => 'Confirmée',
+                                        'prep' => 'En préparation',
+                                        'delivery' => 'En livraison/Prête',
+                                        'finished' => 'Terminée',
+                                        'cancelled' => 'Annulée'
+                                    ];
+                                    $statusLabel = $statusLabels[$order->status] ?? strtoupper($order->status);
+                                @endphp
+                                <span class="badge {{ $statusColor }}">{{ $statusLabel }}</span>
+                            </td>
+                            <td class="px-4 py-3 text-end">
+                                @if($order->status == 'received')
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <form action="{{ route('admin.orders.update', $order) }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="status" value="confirmed">
+                                            <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check me-1"></i> Accepter</button>
+                                        </form>
+                                        <form action="{{ route('admin.orders.update', $order) }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-xmark me-1"></i> Refuser</button>
+                                        </form>
                                     </div>
-                                    @if($order->delivery_type == 'delivery' && $order->status != 'finished')
-                                        <input type="text" name="delivery_driver" class="form-control form-control-sm driver-input mt-1" placeholder="Nom du livreur" value="{{ $order->delivery_driver }}">
-                                    @endif
-                                </form>
-                        </td>
+                                @elseif($order->status == 'cancelled')
+                                    <span class="text-danger fw-bold"><i class="fa-solid fa-ban"></i> Commande refusée</span>
+                                @else
+                                    <form action="{{ route('admin.orders.update', $order) }}" method="POST" class="d-flex flex-column gap-2 align-items-end">
+                                        @csrf
+                                        <div class="d-flex align-items-center gap-2">
+                                            <select name="status" class="form-select form-select-sm status-select" style="width: auto;">
+                                                <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmée</option>
+                                                <option value="prep" {{ $order->status == 'prep' ? 'selected' : '' }}>Préparation</option>
+                                                @if($order->delivery_type == 'delivery')
+                                                    <option value="delivery" {{ $order->status == 'delivery' ? 'selected' : '' }}>Livraison</option>
+                                                @endif
+                                                <option value="finished" {{ $order->status == 'finished' ? 'selected' : '' }}>Terminée</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                        @if($order->delivery_type == 'delivery' && $order->status != 'finished')
+                                            <input type="text" name="delivery_driver" class="form-control form-control-sm driver-input mt-1" style="max-width: 200px;" placeholder="Nom du livreur" value="{{ $order->delivery_driver }}">
+                                        @endif
+                                    </form>
+                                @endif
+                            </td>
                     </tr>
                     @empty
                     <tr>

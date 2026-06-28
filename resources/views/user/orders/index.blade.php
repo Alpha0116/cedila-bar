@@ -42,6 +42,8 @@
                                             <span class="badge bg-warning text-dark rounded-pill px-3">En préparation</span>
                                         @elseif($order->status == 'confirmed')
                                             <span class="badge bg-primary rounded-pill px-3">Confirmée</span>
+                                        @elseif($order->status == 'cancelled')
+                                            <span class="badge bg-danger rounded-pill px-3">Annulée</span>
                                         @else
                                             <span class="badge bg-secondary rounded-pill px-3">En attente</span>
                                         @endif
