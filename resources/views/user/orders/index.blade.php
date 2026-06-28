@@ -68,7 +68,9 @@
                 <div class="alert alert-light text-center py-5 border-0 shadow-sm rounded-4">
                     <i class="fa-regular fa-calendar-xmark fa-3x text-muted mb-3"></i>
                     <h5 class="fw-bold">Vous n'avez aucune réservation.</h5>
-                    <a href="{{ route('restaurant.accueil') }}" class="btn btn-primary mt-3 rounded-pill px-4">Réserver une table</a>
+                    <button type="button" class="btn btn-primary mt-3 rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#globalReservationModal">
+                        Réserver une table
+                    </button>
                 </div>
             @else
                 <div class="row row-cols-1 row-cols-md-2 g-4">
