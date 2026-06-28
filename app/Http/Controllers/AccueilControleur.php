@@ -9,12 +9,17 @@ class AccueilControleur extends Controller
 {
     public function index()
     {
-        $evenements = Evenement::where('is_published', true)->orderBy('event_date', 'asc')->get();
-        $foodItems = \App\Models\MenuItem::where('is_available_today', true)
+        $foodItems = MenuItem::where('is_available_today', true)
                             ->where('type', 'food')
                             ->take(6)
                             ->get();
-                            
-        return view('welcome', compact('evenements', 'foodItems'));
+
+        $evenements = Evenement::where('is_published', true)->orderBy('event_date', 'asc')->get();
+
+        $drinks = MenuItem::where('is_available_today', true)
+                          ->where('type', 'drink')
+                          ->get();
+
+        return view('welcome', compact('evenements', 'foodItems', 'drinks'));
     }
 }
