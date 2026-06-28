@@ -47,9 +47,6 @@
                                             <div>
                                                 <h5 class="mb-1 fw-bold">{{ $item['name'] }}</h5>
                                                 <div class="d-flex flex-wrap gap-2 mt-2">
-                                                    @if(!empty($item['accompanying_drink']))
-                                                        <span class="badge bg-info text-dark rounded-pill"><i class="fa-solid fa-wine-glass me-1"></i> {{ $item['accompanying_drink'] }}</span>
-                                                    @endif
                                                     @if(!empty($item['special_request']))
                                                         <span class="badge bg-warning text-dark rounded-pill"><i class="fa-solid fa-note-sticky me-1"></i> {{ $item['special_request'] }}</span>
                                                     @endif

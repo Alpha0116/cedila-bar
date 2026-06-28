@@ -264,28 +264,6 @@
                         <input type="number" name="quantity" class="form-control form-control-lg" value="1" min="1" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small">Jus ou boisson d'accompagnement</label>
-                        <input class="form-control form-control-lg" list="drinksOptionsAccueil" name="accompanying_drink" placeholder="Cherchez ou saisissez une boisson...">
-                        <datalist id="drinksOptionsAccueil">
-                            @if(isset($drinks))
-                                @foreach($drinks as $drink)
-                                    <option value="{{ $drink->name }}">
-                                @endforeach
-                            @endif
-                            <option value="Coca-Cola">
-                            <option value="Sprite">
-                            <option value="Fanta">
-                            <option value="Jus d'Orange">
-                            <option value="Jus de Pomme">
-                            <option value="Jus de Bissap">
-                            <option value="Jus de Gingembre">
-                            <option value="Bière locale">
-                            <option value="Eau minérale">
-                        </datalist>
-                        <div class="form-text">Tapez pour rechercher ou entrez votre choix s'il n'est pas listé.</div>
-                    </div>
-
                     <div class="mb-4">
                         <label class="form-label fw-bold small">Demande spéciale (optionnel)</label>
                         <textarea name="special_request" class="form-control" rows="2" placeholder="Sans piment, sauce à part..."></textarea>

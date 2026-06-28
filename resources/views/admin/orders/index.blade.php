@@ -36,9 +36,6 @@
                                         @if($item->special_request)
                                             <div class="text-danger ps-2"><i class="fa-solid fa-triangle-exclamation"></i> {{ $item->special_request }}</div>
                                         @endif
-                                        @if($item->accompanying_drink)
-                                            <div class="text-info ps-2"><i class="fa-solid fa-wine-glass"></i> {{ $item->accompanying_drink }}</div>
-                                        @endif
                                     </li>
                                 @endforeach
                             </ul>
