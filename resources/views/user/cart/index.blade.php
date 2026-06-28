@@ -106,7 +106,7 @@
                                 <label class="form-label fw-bold">Type de commande</label>
                                 <select name="delivery_type" class="form-select form-select-lg rounded-pill" id="cartDeliveryType" onchange="toggleCartAddress()" required>
                                     <option value="" disabled selected>Sélectionnez une option</option>
-                                    <option value="pickup">Retrait sur place / À emporter</option>
+                                    <option value="pickup">Retrait sur place</option>
                                     <option value="delivery">Livraison à domicile</option>
                                 </select>
                             </div>
@@ -139,34 +139,36 @@
                                 <textarea name="global_special_request" class="form-control rounded-3" rows="2" placeholder="Ex: Pas trop épicé, sans oignons..."></textarea>
                             </div>
 
-                            <!-- Mode de Paiement -->
-                            <div class="mb-4 bg-light p-3 rounded-4">
-                                <h6 class="fw-bold mb-3">MODE DE PAIEMENT</h6>
-                                
-                                <div class="form-check mb-3 p-3 border rounded-3 bg-white">
-                                    <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payCash" value="cash" required>
-                                    <label class="form-check-label w-100" for="payCash">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-wallet fs-4 me-3 text-primary"></i>
-                                            <div>
-                                                <div class="fw-bold">Paiement cash</div>
-                                                <small class="text-muted">Payez cash à la livraison.</small>
+                            <!-- Mode de Paiement (Only for Delivery) -->
+                            <div id="paymentOptionsBlock" style="display: none;">
+                                <div class="mb-4 bg-light p-3 rounded-4">
+                                    <h6 class="fw-bold mb-3">MODE DE PAIEMENT</h6>
+                                    
+                                    <div class="form-check mb-3 p-3 border rounded-3 bg-white">
+                                        <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payCash" value="cash">
+                                        <label class="form-check-label w-100" for="payCash">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fa-solid fa-wallet fs-4 me-3 text-primary"></i>
+                                                <div>
+                                                    <div class="fw-bold">Paiement cash</div>
+                                                    <small class="text-muted">Payez cash à la livraison.</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
-                                </div>
+                                        </label>
+                                    </div>
 
-                                <div class="form-check p-3 border rounded-3 bg-white">
-                                    <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payMobile" value="mobile" required>
-                                    <label class="form-check-label w-100" for="payMobile">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa-solid fa-mobile-screen-button fs-4 me-3 text-warning"></i>
-                                            <div>
-                                                <div class="fw-bold">Paiement mobile</div>
-                                                <small class="text-muted">Flooz, Moov Money, etc.</small>
+                                    <div class="form-check p-3 border rounded-3 bg-white">
+                                        <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payMobile" value="mobile">
+                                        <label class="form-check-label w-100" for="payMobile">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fa-solid fa-mobile-screen-button fs-4 me-3 text-warning"></i>
+                                                <div>
+                                                    <div class="fw-bold">Paiement mobile</div>
+                                                    <small class="text-muted">MTN, Moov, Celtis</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -185,17 +187,26 @@
     function toggleCartAddress() {
         const type = document.getElementById('cartDeliveryType').value;
         const addressBlock = document.getElementById('cartAddressBlock');
+        const paymentBlock = document.getElementById('paymentOptionsBlock');
         const addressTextarea = addressBlock.querySelector('textarea');
         const addressToggle = document.getElementById('addressVerification');
+        const paymentRadios = paymentBlock.querySelectorAll('input[type="radio"]');
         
         if (type === 'delivery') {
             addressBlock.style.display = 'block';
+            paymentBlock.style.display = 'block';
             addressTextarea.required = true;
             addressToggle.required = true;
+            paymentRadios.forEach(r => r.required = true);
         } else {
             addressBlock.style.display = 'none';
+            paymentBlock.style.display = 'none';
             addressTextarea.required = false;
             addressToggle.required = false;
+            paymentRadios.forEach(r => {
+                r.required = false;
+                r.checked = false; // reset selection
+            });
         }
     }
 </script>

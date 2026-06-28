@@ -19,7 +19,7 @@ class OrderController extends Controller
         $request->validate([
             'delivery_type' => 'required|in:pickup,delivery',
             'delivery_address' => 'required_if:delivery_type,delivery',
-            'payment_method' => 'required|in:cash,mobile',
+            'payment_method' => 'required_if:delivery_type,delivery|in:cash,mobile',
             'global_special_request' => 'nullable|string',
             // needs_cutlery will just be a boolean based on its presence
         ]);
