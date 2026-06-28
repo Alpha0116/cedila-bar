@@ -24,6 +24,10 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/reserve', [ReservationController::class, 'store'])->name('reserve.store');
+
+    // Espace client
+    Route::get('/mes-commandes', [\App\Http\Controllers\UserController::class, 'index'])->name('user.orders.index');
+    Route::get('/mes-commandes/{id}', [\App\Http\Controllers\UserController::class, 'showOrder'])->name('user.orders.show');
 });
 
 // Admin routes

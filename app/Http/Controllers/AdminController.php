@@ -38,17 +38,38 @@ class AdminController extends Controller
         return view('admin.reservations.index', compact('reservations'));
     }
 
-    public function updateOrderStatus(Request $request, Order $order)
-    {
-        $request->validate(['status' => 'required|in:received,prep,delivery,finished']);
-        $order->update(['status' => $request->status]);
-        return back()->with('success', 'Statut de commande mis à jour.');
-    }
-
     public function updateReservationStatus(Request $request, Reservation $reservation)
     {
-        $request->validate(['status' => 'required|in:pending,confirmed,rejected']);
         $reservation->update(['status' => $request->status]);
-        return back()->with('success', 'Statut de réservation mis à jour.');
+        
+        return redirect()->back()->with('success', 'Statut de la réservation mis à jour.');
+    }
+
+    public function updateOrderStatus(Request $request, Order $order)
+    {
+        $order->status = $request->status;
+        
+        if ($request->status == 'confirmed' && !$order->confirmed_at) {
+            $order->confirmed_at = now();
+        } elseif ($request->status == 'prep' && !$order->prep_at) {
+            if (!$order->confirmed_at) $order->confirmed_at = now();
+            $order->prep_at = now();
+        } elseif ($request->status == 'delivery' && !$order->delivery_at) {
+            if (!$order->confirmed_at) $order->confirmed_at = now();
+            if (!$order->prep_at) $order->prep_at = now();
+            $order->delivery_at = now();
+            if ($request->has('delivery_driver')) {
+                $order->delivery_driver = $request->delivery_driver;
+            }
+        } elseif ($request->status == 'finished' && !$order->finished_at) {
+            if (!$order->confirmed_at) $order->confirmed_at = now();
+            if (!$order->prep_at) $order->prep_at = now();
+            if ($order->delivery_type == 'delivery' && !$order->delivery_at) $order->delivery_at = now();
+            $order->finished_at = now();
+        }
+
+        $order->save();
+        
+        return redirect()->back()->with('success', 'Statut de la commande mis à jour.');
     }
 }

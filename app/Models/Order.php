@@ -14,7 +14,19 @@ class Order extends Model
         'delivery_type',
         'delivery_address',
         'special_request',
-        'total_price'
+        'total_price',
+        'confirmed_at',
+        'prep_at',
+        'delivery_at',
+        'finished_at',
+        'delivery_driver'
+    ];
+
+    protected $casts = [
+        'confirmed_at' => 'datetime',
+        'prep_at' => 'datetime',
+        'delivery_at' => 'datetime',
+        'finished_at' => 'datetime',
     ];
 
     public function user() {

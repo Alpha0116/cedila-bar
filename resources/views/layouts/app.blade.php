@@ -213,13 +213,33 @@
                                 </a>
                             </li>
                         @else
-                            <li class="nav-item mt-2 mt-md-0 ms-md-3">
-                                <a class="btn btn-danger fw-bold px-4 rounded-pill shadow-sm" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fa-solid fa-power-off me-1"></i> Déconnexion
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="fa-solid fa-user-circle me-1"></i> {{ Auth::user()->name }}
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
+
+                                <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('user.orders.index') }}">
+                                        <i class="fa-solid fa-clock-rotate-left me-2"></i> Mes Commandes
+                                    </a>
+                                    
+                                    @if(Auth::user()->is_admin)
+                                        <a class="dropdown-item text-primary fw-bold" href="{{ route('admin.dashboard') }}">
+                                            <i class="fa-solid fa-shield-halved me-2"></i> Panneau Admin
+                                        </a>
+                                    @endif
+                                    
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fa-solid fa-right-from-bracket me-2"></i> {{ __('Se déconnecter') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
                             </li>
                         @endguest
                     </ul>

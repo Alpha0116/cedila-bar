@@ -50,14 +50,16 @@
                         <td class="px-4 py-3 text-center">
                             @php
                                 $statusColors = [
-                                    'received' => 'bg-warning text-dark',
-                                    'prep' => 'bg-primary',
+                                    'received' => 'bg-secondary',
+                                    'confirmed' => 'bg-primary',
+                                    'prep' => 'bg-warning text-dark',
                                     'delivery' => 'bg-info',
                                     'finished' => 'bg-success'
                                 ];
                                 $statusColor = $statusColors[$order->status] ?? 'bg-secondary';
                                 $statusLabels = [
                                     'received' => 'Reçue',
+                                    'confirmed' => 'Confirmée',
                                     'prep' => 'En préparation',
                                     'delivery' => 'En livraison/Prête',
                                     'finished' => 'Terminée'
@@ -67,15 +69,24 @@
                             <span class="badge {{ $statusColor }}">{{ $statusLabel }}</span>
                         </td>
                         <td class="px-4 py-3 text-end">
-                            <form action="{{ route('admin.orders.update', $order->id) }}" method="POST" class="d-flex align-items-center justify-content-end">
-                                @csrf
-                                <select name="status" class="form-select form-select-sm me-2 w-auto" onchange="this.form.submit()">
-                                    <option value="received" {{ $order->status == 'received' ? 'selected' : '' }}>Reçue</option>
-                                    <option value="prep" {{ $order->status == 'prep' ? 'selected' : '' }}>Préparation</option>
-                                    <option value="delivery" {{ $order->status == 'delivery' ? 'selected' : '' }}>Livraison</option>
-                                    <option value="finished" {{ $order->status == 'finished' ? 'selected' : '' }}>Terminée</option>
-                                </select>
-                            </form>
+                                <form action="{{ route('admin.orders.update', $order) }}" method="POST" class="d-flex flex-column gap-2">
+                                    @csrf
+                                    <div class="d-flex align-items-center gap-2">
+                                        <select name="status" class="form-select form-select-sm status-select" style="width: auto;">
+                                            <option value="received" {{ $order->status == 'received' ? 'selected' : '' }}>Reçue</option>
+                                            <option value="confirmed" {{ $order->status == 'confirmed' ? 'selected' : '' }}>Confirmée</option>
+                                            <option value="prep" {{ $order->status == 'prep' ? 'selected' : '' }}>Préparation</option>
+                                            @if($order->delivery_type == 'delivery')
+                                                <option value="delivery" {{ $order->status == 'delivery' ? 'selected' : '' }}>Livraison</option>
+                                            @endif
+                                            <option value="finished" {{ $order->status == 'finished' ? 'selected' : '' }}>Terminée</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa-solid fa-check"></i></button>
+                                    </div>
+                                    @if($order->delivery_type == 'delivery' && $order->status != 'finished')
+                                        <input type="text" name="delivery_driver" class="form-control form-control-sm driver-input mt-1" placeholder="Nom du livreur" value="{{ $order->delivery_driver }}">
+                                    @endif
+                                </form>
                         </td>
                     </tr>
                     @empty
