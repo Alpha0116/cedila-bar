@@ -252,7 +252,7 @@
             </div>
             <div class="modal-body p-4">
                 <h4 id="modalItemName" class="mb-1 fw-bold text-navy"></h4>
-                <p class="text-muted mb-4">Prix unitaire: <span id="modalItemPrice" class="fw-bold text-primary"></span> €</p>
+                <p class="text-muted mb-4">Prix unitaire: <span id="modalItemPrice" class="fw-bold text-primary"></span> FCFA</p>
                 
                 <form action="{{ route('order.store') }}" method="POST">
                     @csrf
