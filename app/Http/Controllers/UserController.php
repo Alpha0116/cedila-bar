@@ -43,10 +43,10 @@ class UserController extends Controller
         
         if ($reservation->status == 'pending') {
             $reservation->update(['status' => 'cancelled']);
-            return redirect()->back()->with('success', 'Votre réservation a été annulée avec succès.');
+            return redirect()->back()->with('active_tab', 'reservations')->with('success', 'Votre réservation a été annulée avec succès.');
         }
 
-        return redirect()->back()->with('error', 'Vous ne pouvez plus annuler cette réservation car elle a déjà été traitée.');
+        return redirect()->back()->with('active_tab', 'reservations')->with('error', 'Vous ne pouvez plus annuler cette réservation car elle a déjà été traitée.');
     }
 
     public function updateReservation(Request $request, $id)
@@ -60,9 +60,9 @@ class UserController extends Controller
                 'guests' => $request->guests,
                 'special_request' => $request->special_request,
             ]);
-            return redirect()->back()->with('success', 'Votre réservation a été modifiée avec succès.');
+            return redirect()->back()->with('active_tab', 'reservations')->with('success', 'Votre réservation a été modifiée avec succès.');
         }
 
-        return redirect()->back()->with('error', 'Vous ne pouvez plus modifier cette réservation car elle a déjà été traitée.');
+        return redirect()->back()->with('active_tab', 'reservations')->with('error', 'Vous ne pouvez plus modifier cette réservation car elle a déjà été traitée.');
     }
 }

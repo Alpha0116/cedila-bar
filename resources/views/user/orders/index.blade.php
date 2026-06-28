@@ -6,12 +6,12 @@
 
     <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill px-4 fw-bold" id="pills-orders-tab" data-bs-toggle="pill" data-bs-target="#pills-orders" type="button" role="tab" aria-controls="pills-orders" aria-selected="true">
+            <button class="nav-link {{ session('active_tab', 'orders') == 'orders' ? 'active' : '' }} rounded-pill px-4 fw-bold" id="pills-orders-tab" data-bs-toggle="pill" data-bs-target="#pills-orders" type="button" role="tab" aria-controls="pills-orders" aria-selected="{{ session('active_tab', 'orders') == 'orders' ? 'true' : 'false' }}">
                 <i class="fa-solid fa-bag-shopping me-2"></i> Commandes
             </button>
         </li>
         <li class="nav-item ms-2" role="presentation">
-            <button class="nav-link rounded-pill px-4 fw-bold" id="pills-reservations-tab" data-bs-toggle="pill" data-bs-target="#pills-reservations" type="button" role="tab" aria-controls="pills-reservations" aria-selected="false">
+            <button class="nav-link {{ session('active_tab') == 'reservations' ? 'active' : '' }} rounded-pill px-4 fw-bold" id="pills-reservations-tab" data-bs-toggle="pill" data-bs-target="#pills-reservations" type="button" role="tab" aria-controls="pills-reservations" aria-selected="{{ session('active_tab') == 'reservations' ? 'true' : 'false' }}">
                 <i class="fa-regular fa-calendar-check me-2"></i> Réservations
             </button>
         </li>
@@ -19,7 +19,7 @@
 
     <div class="tab-content" id="pills-tabContent">
         <!-- Commandes -->
-        <div class="tab-pane fade show active" id="pills-orders" role="tabpanel" aria-labelledby="pills-orders-tab" tabindex="0">
+        <div class="tab-pane fade {{ session('active_tab', 'orders') == 'orders' ? 'show active' : '' }}" id="pills-orders" role="tabpanel" aria-labelledby="pills-orders-tab" tabindex="0">
             @if($orders->isEmpty())
                 <div class="alert alert-light text-center py-5 border-0 shadow-sm rounded-4">
                     <i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Reservations -->
-        <div class="tab-pane fade" id="pills-reservations" role="tabpanel" aria-labelledby="pills-reservations-tab" tabindex="0">
+        <div class="tab-pane fade {{ session('active_tab') == 'reservations' ? 'show active' : '' }}" id="pills-reservations" role="tabpanel" aria-labelledby="pills-reservations-tab" tabindex="0">
             @if($reservations->isEmpty())
                 <div class="alert alert-light text-center py-5 border-0 shadow-sm rounded-4">
                     <i class="fa-regular fa-calendar-xmark fa-3x text-muted mb-3"></i>
