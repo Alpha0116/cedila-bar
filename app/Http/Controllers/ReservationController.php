@@ -23,6 +23,6 @@ class ReservationController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->route('home')->with('success', 'Votre demande de réservation a été envoyée !');
+        return redirect()->back()->with('success', 'Votre réservation a bien été envoyée. Nous vous contacterons pour confirmation.');
     }
 }
