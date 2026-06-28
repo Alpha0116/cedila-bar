@@ -122,6 +122,40 @@
             </div>
 
             <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-bold mb-4">Informations supplémentaires</h5>
+                
+                @if($order->special_request)
+                    <div class="mb-4 bg-light rounded-4 p-3 border-start border-4 border-warning">
+                        <p class="mb-1 fw-bold text-dark"><i class="fa-solid fa-pen-to-square text-warning me-2"></i> Note globale :</p>
+                        <p class="mb-0 text-muted ms-4">{{ $order->special_request }}</p>
+                    </div>
+                @endif
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-3 bg-white h-100">
+                            <h6 class="fw-bold mb-2 text-muted">Couvert</h6>
+                            @if($order->needs_cutlery)
+                                <div class="text-dark fw-bold"><i class="fa-solid fa-check text-success me-2"></i> Couverts demandés</div>
+                            @else
+                                <div class="text-muted"><i class="fa-solid fa-xmark text-danger me-2"></i> Pas de couverts</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-3 bg-white h-100">
+                            <h6 class="fw-bold mb-2 text-muted">Paiement</h6>
+                            @if($order->payment_method == 'cash')
+                                <div class="text-dark fw-bold"><i class="fa-solid fa-wallet text-primary me-2"></i> Paiement cash à la livraison</div>
+                            @elseif($order->payment_method == 'mobile')
+                                <div class="text-dark fw-bold"><i class="fa-solid fa-mobile-screen-button text-warning me-2"></i> Paiement mobile</div>
+                            @else
+                                <div class="text-muted">Non spécifié</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
                 @if($order->status == 'cancelled')
                     <div class="text-center py-4">
                         <i class="fa-solid fa-ban fa-4x text-danger mb-3"></i>

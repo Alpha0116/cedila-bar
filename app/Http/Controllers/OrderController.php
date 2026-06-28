@@ -19,6 +19,9 @@ class OrderController extends Controller
         $request->validate([
             'delivery_type' => 'required|in:pickup,delivery',
             'delivery_address' => 'required_if:delivery_type,delivery',
+            'payment_method' => 'required|in:cash,mobile',
+            'global_special_request' => 'nullable|string',
+            // needs_cutlery will just be a boolean based on its presence
         ]);
 
         $totalPrice = 0;
@@ -31,7 +34,10 @@ class OrderController extends Controller
             'status' => 'received',
             'delivery_type' => $request->delivery_type,
             'delivery_address' => $request->delivery_address,
-            'total_price' => $totalPrice
+            'total_price' => $totalPrice,
+            'needs_cutlery' => $request->has('needs_cutlery'),
+            'payment_method' => $request->payment_method,
+            'special_request' => $request->global_special_request
         ]);
 
         foreach ($cart as $item) {

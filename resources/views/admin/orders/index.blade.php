@@ -39,6 +39,9 @@
                                     </li>
                                 @endforeach
                             </ul>
+                            @if($order->special_request)
+                                <div class="text-danger small mt-2 fw-bold"><i class="fa-solid fa-pen-to-square"></i> Note : {{ $order->special_request }}</div>
+                            @endif
                         </td>
                         <td class="px-4 py-3 text-center">
                             @if($order->delivery_type == 'delivery')
@@ -48,7 +51,23 @@
                                 <span class="badge bg-secondary"><i class="fa-solid fa-bag-shopping me-1"></i> Sur place/Emporter</span>
                             @endif
                         </td>
-                        <td class="px-4 py-3 text-end fw-bold">{{ $order->total_price }} FCFA</td>
+                        <td class="px-4 py-3">
+                            <div class="small fw-bold">{{ $order->total_price }} FCFA</div>
+                            
+                            <div class="mt-2">
+                                @if($order->payment_method == 'cash')
+                                    <span class="badge bg-primary w-100 mb-1"><i class="fa-solid fa-wallet"></i> Cash</span>
+                                @elseif($order->payment_method == 'mobile')
+                                    <span class="badge bg-warning text-dark w-100 mb-1"><i class="fa-solid fa-mobile-screen-button"></i> Mobile</span>
+                                @endif
+                                
+                                @if($order->needs_cutlery)
+                                    <span class="badge bg-success w-100"><i class="fa-solid fa-utensils"></i> Couverts</span>
+                                @else
+                                    <span class="badge bg-light text-dark border w-100"><i class="fa-solid fa-xmark"></i> Sans couverts</span>
+                                @endif
+                            </div>
+                        </td>
                         <td class="px-4 py-3 text-center">
                                 @php
                                     $statusColors = [

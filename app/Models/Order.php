@@ -20,7 +20,9 @@ class Order extends Model
         'prep_at',
         'delivery_at',
         'finished_at',
-        'delivery_driver'
+        'delivery_driver',
+        'needs_cutlery',
+        'payment_method'
     ];
 
     protected $casts = [

@@ -87,21 +87,91 @@
 
                         <form action="{{ route('order.store') }}" method="POST">
                             @csrf
+                            
+                            <!-- Couverts (Applies to all) -->
+                            <div class="mb-4 bg-light p-3 rounded-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="fw-bold mb-1"><i class="fa-solid fa-utensils me-2"></i> Besoin de couvert ?</h6>
+                                        <small class="text-muted">Aidez-nous à réduire le gaspillage.</small>
+                                    </div>
+                                    <div class="form-check form-switch fs-4 mb-0">
+                                        <input class="form-check-input" type="checkbox" name="needs_cutlery" id="needsCutlery" value="1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mode de récupération -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold small">Où manger ?</label>
-                                <select name="delivery_type" class="form-select form-select-lg" id="cartDeliveryType" onchange="toggleCartAddress()" required>
-                                    <option value="pickup">Sur place / À emporter</option>
-                                    <option value="delivery">A livrer (+ Frais de livraison)</option>
+                                <label class="form-label fw-bold">Type de commande</label>
+                                <select name="delivery_type" class="form-select form-select-lg rounded-pill" id="cartDeliveryType" onchange="toggleCartAddress()" required>
+                                    <option value="" disabled selected>Sélectionnez une option</option>
+                                    <option value="pickup">Retrait sur place / À emporter</option>
+                                    <option value="delivery">Livraison à domicile</option>
                                 </select>
                             </div>
                             
-                            <div class="mb-4" id="cartAddressField" style="display: none;">
-                                <label class="form-label fw-bold small">Adresse de livraison détaillée</label>
-                                <textarea name="delivery_address" class="form-control" rows="3" placeholder="Quartier, rue, repère..."></textarea>
+                            <!-- Delivery details -->
+                            <div id="cartAddressBlock" style="display: none;">
+                                <div class="mb-4 bg-light p-3 rounded-4">
+                                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-location-dot me-2"></i> Où voulez-vous être livré ?</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold">Adresse de livraison</label>
+                                        <textarea name="delivery_address" class="form-control rounded-3" rows="3" placeholder="Quartier, rue, repère exact..."></textarea>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Cette adresse est-elle correcte ?</h6>
+                                            <small class="text-muted">Nous demanderons au livreur de vous contacter.</small>
+                                        </div>
+                                        <div class="form-check form-switch fs-4 mb-0">
+                                            <!-- Just a UI verification toggle -->
+                                            <input class="form-check-input" type="checkbox" id="addressVerification" value="1">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold shadow-sm">
-                                <i class="fa-solid fa-check-circle me-2"></i> Valider la commande
+                            <!-- Special requests (Global) -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold"><i class="fa-solid fa-pen-to-square me-2"></i> Quelques choses à ajouter, des allergies ?</label>
+                                <textarea name="global_special_request" class="form-control rounded-3" rows="2" placeholder="Ex: Pas trop épicé, sans oignons..."></textarea>
+                            </div>
+
+                            <!-- Mode de Paiement -->
+                            <div class="mb-4 bg-light p-3 rounded-4">
+                                <h6 class="fw-bold mb-3">MODE DE PAIEMENT</h6>
+                                
+                                <div class="form-check mb-3 p-3 border rounded-3 bg-white">
+                                    <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payCash" value="cash" required>
+                                    <label class="form-check-label w-100" for="payCash">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-solid fa-wallet fs-4 me-3 text-primary"></i>
+                                            <div>
+                                                <div class="fw-bold">Paiement cash</div>
+                                                <small class="text-muted">Payez cash à la livraison.</small>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="form-check p-3 border rounded-3 bg-white">
+                                    <input class="form-check-input float-end mt-1 fs-5" type="radio" name="payment_method" id="payMobile" value="mobile" required>
+                                    <label class="form-check-label w-100" for="payMobile">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa-solid fa-mobile-screen-button fs-4 me-3 text-warning"></i>
+                                            <div>
+                                                <div class="fw-bold">Paiement mobile</div>
+                                                <small class="text-muted">Flooz, Moov Money, etc.</small>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning text-dark btn-lg w-100 rounded-pill fw-bold shadow-sm py-3" id="submitOrderBtn">
+                                Finaliser votre commande <i class="fa-solid fa-chevron-right ms-2"></i>
                             </button>
                         </form>
                     </div>
@@ -114,13 +184,18 @@
 <script>
     function toggleCartAddress() {
         const type = document.getElementById('cartDeliveryType').value;
-        const addressField = document.getElementById('cartAddressField');
+        const addressBlock = document.getElementById('cartAddressBlock');
+        const addressTextarea = addressBlock.querySelector('textarea');
+        const addressToggle = document.getElementById('addressVerification');
+        
         if (type === 'delivery') {
-            addressField.style.display = 'block';
-            addressField.querySelector('textarea').required = true;
+            addressBlock.style.display = 'block';
+            addressTextarea.required = true;
+            addressToggle.required = true;
         } else {
-            addressField.style.display = 'none';
-            addressField.querySelector('textarea').required = false;
+            addressBlock.style.display = 'none';
+            addressTextarea.required = false;
+            addressToggle.required = false;
         }
     }
 </script>
