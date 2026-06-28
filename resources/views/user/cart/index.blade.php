@@ -38,27 +38,29 @@
                                     <div class="d-flex w-100 justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             @if($item['image'])
-                                                <img src="{{ Storage::url($item['image']) }}" alt="{{ $item['name'] }}" class="rounded-3 me-3 object-fit-cover shadow-sm" style="width: 70px; height: 70px;">
+                                                <img src="{{ Storage::url($item['image']) }}" alt="{{ $item['name'] }}" class="rounded-3 me-3 object-fit-cover shadow-sm" style="width: 50px; height: 50px;">
                                             @else
-                                                <div class="rounded-3 me-3 bg-light d-flex align-items-center justify-content-center text-muted shadow-sm" style="width: 70px; height: 70px;">
-                                                    <i class="fa-solid fa-utensils fa-lg"></i>
+                                                <div class="rounded-3 me-3 bg-light d-flex align-items-center justify-content-center text-muted shadow-sm" style="width: 50px; height: 50px;">
+                                                    <i class="fa-solid fa-utensils"></i>
                                                 </div>
                                             @endif
                                             <div>
-                                                <h5 class="mb-1 fw-bold">{{ $item['name'] }}</h5>
+                                                <h6 class="mb-0 fw-bold text-uppercase">{{ $item['quantity'] }} X {{ $item['name'] }}</h6>
+                                                <div class="small text-muted mt-1">{{ $item['price'] }} FCFA</div>
                                                 <div class="d-flex flex-wrap gap-2 mt-2">
                                                     @if(!empty($item['special_request']))
-                                                        <span class="badge bg-warning text-dark rounded-pill"><i class="fa-solid fa-note-sticky me-1"></i> {{ $item['special_request'] }}</span>
+                                                        <span class="badge bg-warning text-dark rounded-pill" style="font-size: 0.7rem;"><i class="fa-solid fa-note-sticky me-1"></i> {{ $item['special_request'] }}</span>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="text-end">
-                                            <div class="fw-bold fs-6 text-muted mb-2">{{ $item['price'] }} FCFA x {{ $item['quantity'] }}</div>
-                                            <div class="fw-bold fs-5" style="color: var(--cedila-title);">{{ $item['price'] * $item['quantity'] }} FCFA</div>
-                                            <form action="{{ route('cart.remove', $id) }}" method="POST" class="mt-2">
+                                        <div class="d-flex flex-column align-items-end">
+                                            <div class="fw-bold mb-2" style="color: var(--cedila-title);">{{ $item['price'] * $item['quantity'] }} FCFA</div>
+                                            <form action="{{ route('cart.remove', $id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"><i class="fa-solid fa-trash me-1"></i> Retirer</button>
+                                                <button type="submit" class="btn btn-sm btn-light text-danger rounded-circle shadow-sm" style="width: 32px; height: 32px;" title="Retirer">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
