@@ -26,6 +26,7 @@ class OrderController extends Controller
             'delivery_type' => $request->delivery_type,
             'delivery_address' => $request->delivery_address,
             'special_request' => $request->special_request,
+            'accompanying_drink' => $request->accompanying_drink,
             'total_price' => $totalPrice
         ]);
 

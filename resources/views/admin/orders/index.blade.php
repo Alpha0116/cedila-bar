@@ -37,6 +37,9 @@
                             @if($order->special_request)
                                 <div class="text-danger small mt-1"><i class="fa-solid fa-triangle-exclamation"></i> {{ $order->special_request }}</div>
                             @endif
+                            @if($order->accompanying_drink)
+                                <div class="text-info small mt-1"><i class="fa-solid fa-wine-glass"></i> {{ $order->accompanying_drink }}</div>
+                            @endif
                         </td>
                         <td class="px-4 py-3 text-center">
                             @if($order->delivery_type == 'delivery')

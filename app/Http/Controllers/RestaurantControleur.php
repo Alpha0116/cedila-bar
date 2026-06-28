@@ -11,7 +11,11 @@ class RestaurantControleur extends Controller
         $foodItems = MenuItem::where('is_available_today', true)
                             ->where('type', 'food')
                             ->get();
+
+        $drinks = MenuItem::where('is_available_today', true)
+                          ->where('type', 'drink')
+                          ->get();
                             
-        return view('restaurant.index', compact('foodItems'));
+        return view('restaurant.index', compact('foodItems', 'drinks'));
     }
 }

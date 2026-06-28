@@ -122,6 +122,20 @@
             </div>
 
             <div class="card border-0 shadow-sm rounded-4 p-4">
+                @if($order->special_request)
+                    <div class="mb-4 bg-light rounded-4 p-3 border-start border-4 border-warning">
+                        <p class="mb-1 fw-bold text-dark"><i class="fa-solid fa-note-sticky text-warning me-2"></i> Demande spéciale :</p>
+                        <p class="mb-0 text-muted ms-4">{{ $order->special_request }}</p>
+                    </div>
+                @endif
+                
+                @if($order->accompanying_drink)
+                    <div class="mb-4 bg-light rounded-4 p-3 border-start border-4 border-info">
+                        <p class="mb-1 fw-bold text-dark"><i class="fa-solid fa-wine-glass text-info me-2"></i> Boisson d'accompagnement :</p>
+                        <p class="mb-0 text-muted ms-4">{{ $order->accompanying_drink }}</p>
+                    </div>
+                @endif
+                
                 @if($order->status == 'cancelled')
                     <div class="text-center py-4">
                         <i class="fa-solid fa-ban fa-4x text-danger mb-3"></i>

@@ -109,6 +109,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label fw-bold small">Jus ou boisson d'accompagnement</label>
+                        <input class="form-control form-control-lg" list="drinksOptions" name="accompanying_drink" placeholder="Cherchez ou saisissez une boisson...">
+                        <datalist id="drinksOptions">
+                            @if(isset($drinks))
+                                @foreach($drinks as $drink)
+                                    <option value="{{ $drink->name }}">
+                                @endforeach
+                            @endif
+                            <option value="Coca-Cola">
+                            <option value="Sprite">
+                            <option value="Fanta">
+                            <option value="Jus d'Orange">
+                            <option value="Jus de Pomme">
+                            <option value="Jus de Bissap">
+                            <option value="Jus de Gingembre">
+                            <option value="Bière locale">
+                            <option value="Eau minérale">
+                        </datalist>
+                        <div class="form-text">Tapez pour rechercher ou entrez votre choix s'il n'est pas listé.</div>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label fw-bold small">Où manger ?</label>
                         <select name="delivery_type" class="form-select form-select-lg" id="modalDeliveryType" onchange="toggleModalAddress()">
                             <option value="pickup">Sur place / À emporter</option>

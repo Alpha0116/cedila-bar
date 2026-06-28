@@ -14,6 +14,7 @@ class Order extends Model
         'delivery_type',
         'delivery_address',
         'special_request',
+        'accompanying_drink',
         'total_price',
         'confirmed_at',
         'prep_at',
