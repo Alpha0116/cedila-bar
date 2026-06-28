@@ -124,8 +124,7 @@
                                     <hr>
                                     <div class="d-flex justify-content-between align-items-center mt-3">
                                         <div>
-                                            <h6 class="fw-bold mb-1">Cette adresse est-elle correcte ?</h6>
-                                            <small class="text-muted">Nous demanderons au livreur de vous contacter.</small>
+                                            <h6 class="fw-bold mb-0">Que le livreur me contacte avant de bouger.</h6>
                                         </div>
                                         <div class="form-check form-switch fs-4 mb-0">
                                             <!-- Just a UI verification toggle -->
