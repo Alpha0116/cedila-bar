@@ -198,6 +198,20 @@
                             @endif
                         @endauth
 
+                        <!-- Cart Icon -->
+                        <li class="nav-item me-3 d-flex align-items-center">
+                            <a href="{{ route('cart.index') }}" class="btn btn-outline-primary position-relative rounded-pill px-3 fw-bold">
+                                <i class="fa-solid fa-cart-shopping"></i> Panier
+                                @php $cartCount = count(session('cart', [])); @endphp
+                                @if($cartCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $cartCount }}
+                                        <span class="visually-hidden">articles dans le panier</span>
+                                    </span>
+                                @endif
+                            </a>
+                        </li>
+
                         <!-- Dark Mode Toggle -->
                         <li class="nav-item me-3 d-flex align-items-center">
                             <button id="darkModeToggle" class="btn btn-outline-secondary btn-sm rounded-circle" style="width: 36px; height: 36px;">

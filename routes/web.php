@@ -6,6 +6,7 @@ use App\Http\Controllers\AccueilControleur;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\RestaurantControleur;
 use App\Http\Controllers\BarControleur;
@@ -20,8 +21,14 @@ Route::post('/evenements/{id}/like', [BarControleur::class, 'like'])->name('even
 
 Auth::routes();
 
+// Cart routes
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
 // Client routes
 Route::middleware(['auth'])->group(function () {
+
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/reserve', [ReservationController::class, 'store'])->name('reserve.store');
 

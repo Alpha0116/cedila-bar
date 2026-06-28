@@ -254,7 +254,7 @@
                 <h4 id="modalItemName" class="mb-1 fw-bold text-navy"></h4>
                 <p class="text-muted mb-4">Prix unitaire: <span id="modalItemPrice" class="fw-bold text-primary"></span> FCFA</p>
                 
-                <form action="{{ route('order.store') }}" method="POST">
+                <form action="{{ route('cart.add') }}" method="POST">
                     @csrf
                     <!-- We pass only one item in the array to keep compatibility with OrderController logic -->
                     <input type="hidden" name="single_item_id" id="modalItemIdInput" value="">
@@ -286,26 +286,15 @@
                         <div class="form-text">Tapez pour rechercher ou entrez votre choix s'il n'est pas listé.</div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small">Où manger ?</label>
-                        <select name="delivery_type" class="form-select form-select-lg" id="modalDeliveryType" onchange="toggleModalAddress()">
-                            <option value="pickup">Sur place / À emporter</option>
-                            <option value="delivery">A livrer</option>
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3" id="modalAddressField" style="display: none;">
-                        <label class="form-label fw-bold small">Adresse de livraison</label>
-                        <textarea name="delivery_address" class="form-control" rows="2"></textarea>
-                    </div>
-
                     <div class="mb-4">
-                        <label class="form-label fw-bold small">Demande spéciale</label>
-                        <textarea name="special_request" class="form-control" rows="2" placeholder="Ex: Sans oignons..."></textarea>
+                        <label class="form-label fw-bold small">Demande spéciale (optionnel)</label>
+                        <textarea name="special_request" class="form-control" rows="2" placeholder="Sans piment, sauce à part..."></textarea>
                     </div>
 
                     @auth
-                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Valider la commande</button>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill fw-bold shadow-sm">
+                            <i class="fa-solid fa-cart-plus me-2"></i> Ajouter au panier
+                        </button>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg w-100 fw-bold">Se connecter pour commander</a>
                     @endauth

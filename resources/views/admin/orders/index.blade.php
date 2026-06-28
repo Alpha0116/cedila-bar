@@ -31,15 +31,17 @@
                         <td class="px-4 py-3">
                             <ul class="list-unstyled mb-0 small">
                                 @foreach($order->items as $item)
-                                    <li>{{ $item->quantity }}x {{ $item->menuItem->name ?? 'Article inconnu' }}</li>
+                                    <li>
+                                        <strong>{{ $item->quantity }}x {{ $item->menuItem->name ?? 'Article inconnu' }}</strong>
+                                        @if($item->special_request)
+                                            <div class="text-danger ps-2"><i class="fa-solid fa-triangle-exclamation"></i> {{ $item->special_request }}</div>
+                                        @endif
+                                        @if($item->accompanying_drink)
+                                            <div class="text-info ps-2"><i class="fa-solid fa-wine-glass"></i> {{ $item->accompanying_drink }}</div>
+                                        @endif
+                                    </li>
                                 @endforeach
                             </ul>
-                            @if($order->special_request)
-                                <div class="text-danger small mt-1"><i class="fa-solid fa-triangle-exclamation"></i> {{ $order->special_request }}</div>
-                            @endif
-                            @if($order->accompanying_drink)
-                                <div class="text-info small mt-1"><i class="fa-solid fa-wine-glass"></i> {{ $order->accompanying_drink }}</div>
-                            @endif
                         </td>
                         <td class="px-4 py-3 text-center">
                             @if($order->delivery_type == 'delivery')

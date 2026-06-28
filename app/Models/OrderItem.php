@@ -12,7 +12,9 @@ class OrderItem extends Model
         'order_id',
         'menu_item_id',
         'quantity',
-        'price_at_time'
+        'price_at_time',
+        'special_request',
+        'accompanying_drink'
     ];
 
     public function order() {
